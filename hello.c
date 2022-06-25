@@ -99,7 +99,7 @@ int init_module(void) {
 
   int i;
   bool was_system = false;
-  for (i = 0; i <= gdtr.size; i++) {
+  for (i = 0; i <= gdtr.size / 8; i++) {
     if (was_system) {
       was_system = false;
       continue;

@@ -3,20 +3,18 @@
 
 typedef struct {
     u16 size;
-    u64 offset;
+    unsigned __int128 offset;
 } __attribute__((packed)) idtr_t;
 
 int init_module(void) {
     idtr_t idtr;
     asm("sidt %0" : "=m"(idtr));
-    printk("IDTR size: %u\n", idtr.size);
-    printk("IDTR offset: 0x%llx\n", idtr.offset);
 
     int i;
     for (i = 0; i <= idtr.size / 16; i++) {
-      u64 entry = *((u64 *)idtr.offset + i);
+      unsigned __int128 entry = *((unsigned __int128 *)idtr.offset + i);
       if (entry != 0) {
-        printk("Entry %d: 0x%llx\n", i, entry);
+        printk("Entry %d: 0x%llx%llx\n", i, entry, entry >> 64);
       }
     }
     return 0;

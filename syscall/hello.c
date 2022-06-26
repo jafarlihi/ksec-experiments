@@ -2,6 +2,7 @@
 #include <linux/types.h>
 #include <asm/syscall.h>
 #include <linux/kprobes.h>
+#include <linux/swap.h>
 
 int init_module(void) {
   static struct kprobe kp = {
@@ -14,9 +15,8 @@ int init_module(void) {
   unregister_kprobe(&kp);
 
   sys_call_ptr_t *table = kallsyms_lookup_name("sys_call_table");
-  printk("0x%x\n", table);
-
-  printk("%d\n", __NR_syscalls);
+  sys_call_ptr_t *initial_table = kmalloc(__NR_syscalls * sizeof(sys_call_ptr_t));
+  memcpy(initial_table, table, __NR_syscalls * sizeof(sys_call_ptr_t));
 
   return 0;
 }

@@ -15,6 +15,9 @@ int init_module(void) {
 
   sys_call_ptr_t *table = kallsyms_lookup_name("sys_call_table");
   printk("0x%x\n", table);
+
+  printk("%d\n", __NR_syscalls);
+
   return 0;
 }
 
